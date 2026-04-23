@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ali Elmeligy — IT Security & Systems</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #060a0f;
+      --surface: #0d1520;
+      --border: #1a2d45;
+      --accent: #00e5ff;
+      --accent2: #00ff9d;
+      --accent3: #ff4d6d;
+      --text: #c9d8e8;
+      --muted: #5a7a9a;
+      --mono: 'Share Tech Mono', monospace;
+      --sans: 'Syne', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      width: 12px; height: 12px;
+      background: var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, background 0.2s;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.15s ease-out, width 0.2s, height 0.2s;
+      opacity: 0.5;
+    }
+
+    /* Canvas background */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* Layout */
+    main { position: relative; z-index: 1; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 3rem;
+      border-bottom: 1px solid transparent;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    nav.scrolled {
+      background: rgba(6,10,15,0.92);
+      border-color: var(--border);
+      backdrop-filter: blur(12px);
+    }
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 1rem;
+      color: var(--accent);
+      letter-spacing: 2px;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-tag {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.2s forwards;
+    }
+    .hero-name {
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      font-weight: 800;
+      line-height: 0.9;
+      letter-spacing: -3px;
+      color: #fff;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.35s forwards;
+    }
+    .hero-name span { color: var(--accent); }
+    .hero-role {
+      font-family: var(--mono);
+      font-size: clamp(0.9rem, 2vw, 1.2rem);
+      color: var(--muted);
+      margin-top: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.5s forwards;
+    }
+    .hero-desc {
+      max-width: 600px;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--text);
+      margin-top: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.65s forwards;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      margin-top: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.8s forwards;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      transition: background 0.2s, color 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent);
+      transform: translateX(-101%);
+      transition: transform 0.25s;
+    }
+    .btn:hover::before { transform: translateX(0); }
+    .btn:hover { color: var(--bg); }
+    .btn span { position: relative; z-index: 1; }
+    .btn-solid {
+      background: var(--accent);
+      color: var(--bg);
+    }
+    .btn-solid::before { background: #fff; }
+    .btn-solid:hover { color: var(--bg); }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 2px;
+      opacity: 0;
+      animation: fadeUp 0.7s 1s forwards;
+    }
+    .scroll-line {
+      width: 48px;
+      height: 1px;
+      background: var(--muted);
+      position: relative;
+      overflow: hidden;
+    }
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: var(--accent);
+      animation: scrollLine 2s 1.2s infinite;
+    }
+    @keyframes scrollLine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    /* Decorative corner */
+    .hero-corner {
+      position: absolute;
+      top: 8rem; right: 3rem;
+      width: 280px; height: 280px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeIn 1s 0.8s forwards;
+    }
+    .hero-corner::before, .hero-corner::after {
+      content: '';
+      position: absolute;
+      border: 1px solid var(--accent);
+      opacity: 0.3;
+    }
+    .hero-corner::before { inset: 12px; }
+    .hero-corner::after { inset: 24px; }
+    .hex-graphic {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.8;
+    }
+    .hex-graphic .hl { color: var(--accent); }
+
+    /* ── SECTION BASE ── */
+    section { padding: 7rem 3rem; }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .section-label::before {
+      content: '';
+      width: 32px; height: 1px;
+      background: var(--accent);
+    }
+    h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -1px;
+      margin-bottom: 3.5rem;
+    }
+
+    /* ── SKILLS ── */
+    #skills { background: var(--surface); }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5px;
+      background: var(--border);
+    }
+    .skill-card {
+      background: var(--surface);
+      padding: 2rem;
+      transition: background 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .skill-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+    .skill-card:hover { background: var(--bg); }
+    .skill-card:hover::after { width: 100%; }
+    .skill-card-icon {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .skill-card h3 {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .tag {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 0.25rem 0.6rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .skill-card:hover .tag {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    /* ── EXPERIENCE ── */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 8px; bottom: 8px;
+      width: 1px;
+      background: var(--border);
+    }
+    .exp-item {
+      position: relative;
+      margin-bottom: 4rem;
+      padding-left: 2rem;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    .exp-item.visible { opacity: 1; transform: translateX(0); }
+    .exp-item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 8px;
+      width: 9px; height: 9px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--accent);
+    }
+    .exp-date {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--accent2);
+      letter-spacing: 2px;
+      margin-bottom: 0.4rem;
+    }
+    .exp-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.2rem;
+    }
+    .exp-company {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    .exp-bullets { list-style: none; }
+    .exp-bullets li {
+      font-size: 0.95rem;
+      color: var(--text);
+      padding: 0.35rem 0;
+      padding-left: 1.2rem;
+      position: relative;
+      line-height: 1.5;
+    }
+    .exp-bullets li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.7rem;
+    }
+
+    /* ── PROJECTS ── */
+    #projects { background: var(--surface); }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .project-card {
+      border: 1px solid var(--border);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s, transform 0.5s, border-color 0.3s;
+    }
+    .project-card.visible { opacity: 1; transform: translateY(0); }
+    .project-card:hover { border-color: var(--accent); }
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .project-card:hover::before { transform: scaleX(1); }
+    .project-num {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    .project-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.75rem;
+    }
+    .project-card p {
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .project-techs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.2rem;
+    }
+    .project-tech {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--accent2);
+      background: rgba(0,255,157,0.06);
+      border: 1px solid rgba(0,255,157,0.2);
+      padding: 0.2rem 0.6rem;
+    }
+
+    /* ── CERTS ── */
+    .certs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .cert-item {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.2rem 1.5rem;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s, background 0.2s;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: opacity 0.5s, transform 0.5s, border-color 0.2s;
+    }
+    .cert-item.visible { opacity: 1; transform: translateX(0); }
+    .cert-item:hover { border-color: var(--accent); background: rgba(0,229,255,0.03); }
+    .cert-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .cert-name {
+      font-weight: 700;
+      color: #fff;
+      font-size: 0.95rem;
+    }
+    .cert-org {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    /* ── CONTACT ── */
+    #contact { text-align: center; }
+    .contact-email {
+      font-size: clamp(1.5rem, 4vw, 3rem);
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 2.5rem;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .contact-email::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 100%; height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .contact-email:hover { color: var(--accent); }
+    .contact-email:hover::after { transform: scaleX(1); }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer p {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 5rem 1.5rem; }
+      #hero { padding: 7rem 1.5rem 3rem; }
+      .hero-corner { display: none; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<canvas id="bg-canvas"></canvas>
+
+<nav id="navbar">
+  <div class="nav-logo">&gt; ALI_E</div>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#certs">Certs</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<main>
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-tag">// Calgary, AB &nbsp;|&nbsp; Available for Internships</div>
+    <h1 class="hero-name">ALI<br><span>ELMELIGY</span></h1>
+    <div class="hero-role">IT Security Analyst Intern &nbsp;·&nbsp; Cybersecurity &nbsp;·&nbsp; Systems &amp; Cloud</div>
+    <p class="hero-desc">
+      Third-year Computer Science student at the University of Calgary with hands-on experience in IT support, cloud infrastructure, and security monitoring. Passionate about protecting systems, hunting threats, and automating everything that should be automated.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-solid" href="mailto:asamir1666@gmail.com"><span>Get In Touch</span></a>
+      <a class="btn" href="https://linkedin.com/in/ali-elmeligy-49b1111b0" target="_blank"><span>LinkedIn</span></a>
+    </div>
+
+    <div class="hero-corner">
+      <div class="hex-graphic">
+        <span class="hl">SECURITY_STATUS</span><br>
+        ─────────────<br>
+        IAM &nbsp;·&nbsp; <span class="hl">ACTIVE</span><br>
+        SIEM &nbsp;·&nbsp; <span class="hl">MONITORING</span><br>
+        CLOUD &nbsp;·&nbsp; <span class="hl">GCP</span><br>
+        NET &nbsp;·&nbsp; <span class="hl">SECURED</span><br>
+        ─────────────<br>
+        <span class="hl">SYS_ONLINE</span>
+      </div>
+    </div>
+
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      SCROLL
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-label">01 / Technical Arsenal</div>
+    <h2>Skills &amp; Tools</h2>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-card-icon">🛡️</div>
+        <h3>Cybersecurity</h3>
+        <div class="skill-tags">
+          <span class="tag">Incident Response</span>
+          <span class="tag">Security Monitoring</span>
+          <span class="tag">IAM</span>
+          <span class="tag">Network Security</span>
+          <span class="tag">Threat Detection</span>
+          <span class="tag">Endpoint Security</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">☁️</div>
+        <h3>Cloud &amp; Infra</h3>
+        <div class="skill-tags">
+          <span class="tag">Google Cloud Platform</span>
+          <span class="tag">Compute Engine</span>
+          <span class="tag">VM Provisioning</span>
+          <span class="tag">Microsoft Azure</span>
+          <span class="tag">Linux</span>
+          <span class="tag">Windows</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">🔍</div>
+        <h3>Security Tools</h3>
+        <div class="skill-tags">
+          <span class="tag">Microsoft Sentinel</span>
+          <span class="tag">IBM QRadar</span>
+          <span class="tag">CrowdStrike</span>
+          <span class="tag">M365 Defender</span>
+          <span class="tag">EOP</span>
+          <span class="tag">SIEM</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">💻</div>
+        <h3>Dev &amp; Scripting</h3>
+        <div class="skill-tags">
+          <span class="tag">Python</span>
+          <span class="tag">Bash</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">SQL</span>
+          <span class="tag">Git</span>
+          <span class="tag">REST APIs</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">🌐</div>
+        <h3>Networking</h3>
+        <div class="skill-tags">
+          <span class="tag">TCP/IP</span>
+          <span class="tag">DNS</span>
+          <span class="tag">HTTP/HTTPS</span>
+          <span class="tag">SMTP</span>
+          <span class="tag">FTP</span>
+          <span class="tag">Firewall Rules</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">🤝</div>
+        <h3>Soft Skills</h3>
+        <div class="skill-tags">
+          <span class="tag">Analytical Thinking</span>
+          <span class="tag">Communication</span>
+          <span class="tag">Documentation</span>
+          <span class="tag">Team Collaboration</span>
+          <span class="tag">Fast Learner</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-label">02 / Work History</div>
+    <h2>Experience</h2>
+    <div class="timeline">
+      <div class="exp-item">
+        <div class="exp-date">NOV 2023 — PRESENT</div>
+        <div class="exp-title">Data Analyst · Systems &amp; Operations</div>
+        <div class="exp-company">Gold's Gym &nbsp;·&nbsp; Calgary, AB</div>
+        <ul class="exp-bullets">
+          <li>Analyzed operational datasets to identify system anomalies and improve decision-making</li>
+          <li>Built automated tracking and reporting workflows, reducing manual reporting effort by ~35%</li>
+          <li>Troubleshot system access issues and resolved software-related incidents</li>
+          <li>Maintained accurate system records and ensured data integrity across platforms</li>
+        </ul>
+      </div>
+      <div class="exp-item">
+        <div class="exp-date">2024 — PRESENT</div>
+        <div class="exp-title">Web &amp; Systems Developer (Founder)</div>
+        <div class="exp-company">HRTBRK.ca &nbsp;·&nbsp; Calgary, AB</div>
+        <ul class="exp-bullets">
+          <li>Developed and maintained a full-stack e-commerce platform with user data workflows</li>
+          <li>Implemented basic access control and secure handling of user data</li>
+          <li>Identified and resolved system vulnerabilities, bugs, and performance issues</li>
+          <li>Automated internal processes using scripting and structured workflows</li>
+        </ul>
+      </div>
+      <div class="exp-item">
+        <div class="exp-date">APR 2022 — OCT 2022</div>
+        <div class="exp-title">IT Support / Systems Support</div>
+        <div class="exp-company">ESERA Pro Services &nbsp;·&nbsp; Calgary, AB</div>
+        <ul class="exp-bullets">
+          <li>Provided technical support across internal systems and applications</li>
+          <li>Diagnosed and resolved user-reported incidents including access and software issues</li>
+          <li>Assisted in troubleshooting system and network-related problems</li>
+          <li>Documented issues, resolutions, and system activities for accountability</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-label">03 / Projects</div>
+    <h2>Built &amp; Shipped</h2>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-num">01</div>
+        <h3>Cloud Infrastructure &amp; Security Lab</h3>
+        <p>Deployed and configured virtual machines on Google Cloud (Compute Engine). Practiced network configuration, firewall rules, and secure access setup in Linux-based environments.</p>
+        <div class="project-techs">
+          <span class="project-tech">Google Cloud</span>
+          <span class="project-tech">Linux</span>
+          <span class="project-tech">Firewall</span>
+          <span class="project-tech">Compute Engine</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-num">02</div>
+        <h3>Dev Environment Automation Script</h3>
+        <p>Built a Python/Bash script to automate environment setup, configuration, and dependency management — improving consistency and reducing setup time across systems.</p>
+        <div class="project-techs">
+          <span class="project-tech">Python</span>
+          <span class="project-tech">Bash</span>
+          <span class="project-tech">Automation</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-num">03</div>
+        <h3>HRTBRK.ca — E-Commerce Platform</h3>
+        <p>Founded and built a full-stack e-commerce web platform with user data workflows, access control, and secure data handling. Managed backend configurations and system integrations end-to-end.</p>
+        <div class="project-techs">
+          <span class="project-tech">Full-Stack</span>
+          <span class="project-tech">Access Control</span>
+          <span class="project-tech">REST APIs</span>
+          <span class="project-tech">Security</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-num">04</div>
+        <h3>Game Platform — SENG 300</h3>
+        <p>Developed UI components and integrated frontend with backend systems in a collaborative team environment. Participated in debugging, testing, and improving system functionality.</p>
+        <div class="project-techs">
+          <span class="project-tech">Software Engineering</span>
+          <span class="project-tech">UI/Frontend</span>
+          <span class="project-tech">Team Dev</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certs">
+    <div class="section-label">04 / Certifications</div>
+    <h2>Credentials</h2>
+    <div class="certs-list">
+      <div class="cert-item">
+        <div class="cert-icon">🏆</div>
+        <div>
+          <div class="cert-name">OpenStack &amp; NFV (TelcoCloud)</div>
+          <div class="cert-org">Udemy</div>
+        </div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">🗄️</div>
+        <div>
+          <div class="cert-name">Oracle Academy SQL Workshop</div>
+          <div class="cert-org">Oracle</div>
+        </div>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon">📊</div>
+        <div>
+          <div class="cert-name">Data Structures and Algorithms</div>
+          <div class="cert-org">Udemy</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:4rem;">
+      <div class="section-label" style="margin-bottom:1rem;">05 / Education</div>
+      <div class="cert-item">
+        <div class="cert-icon">🎓</div>
+        <div>
+          <div class="cert-name">Bachelor of Computer Science</div>
+          <div class="cert-org">University of Calgary &nbsp;·&nbsp; Sept 2023 – Present</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-label" style="justify-content:center;">06 / Let's Talk</div>
+    <h2>Get In Touch</h2>
+    <a class="contact-email" href="mailto:asamir1666@gmail.com">asamir1666@gmail.com</a>
+    <div class="contact-links">
+      <a class="btn" href="tel:4318665854"><span>431-866-5854</span></a>
+      <a class="btn" href="https://linkedin.com/in/ali-elmeligy-49b1111b0" target="_blank"><span>LinkedIn</span></a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>© 2025 Ali Elmeligy</p>
+  <p>Calgary, AB &nbsp;·&nbsp; Computer Science @ UCalgary</p>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  (function animCursor() {
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  })();
+
+  // Nav scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.exp-item, .project-card, .cert-item');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => obs.observe(el));
+
+  // Canvas grid background
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  const nodes = Array.from({length: 60}, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+  }));
+
+  function drawCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    nodes.forEach(n => {
+      n.x += n.vx; n.y += n.vy;
+      if (n.x < 0 || n.x > canvas.width) n.vx *= -1;
+      if (n.y < 0 || n.y > canvas.height) n.vy *= -1;
+    });
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(0,229,255,${0.15 * (1 - dist/120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.stroke();
+        }
+      }
+      ctx.beginPath();
+      ctx.arc(nodes[i].x, nodes[i].y, 1.5, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(0,229,255,0.4)';
+      ctx.fill();
+    }
+    requestAnimationFrame(drawCanvas);
+  }
+  drawCanvas();
+</script>
+</body>
+</html>
