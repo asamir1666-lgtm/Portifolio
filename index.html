@@ -43,7 +43,7 @@
       z-index: 0;
       opacity: 0.4;
     }
-    
+
     main {
       position: relative;
       z-index: 1;
@@ -105,8 +105,6 @@
       margin-bottom: 3rem;
       color: white;
     }
-
-    /* HERO */
 
     #hero {
       min-height: 100vh;
@@ -178,39 +176,50 @@
       border-color: white;
     }
 
-    /* SKILLS */
-
-    #skills {
+    #skills,
+    #projects {
       background: var(--surface);
     }
 
-    .skills-grid {
+    .skills-grid,
+    .projects-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
       gap: 1.5rem;
     }
 
-    .skill-card {
+    .skill-card,
+    .project-card {
       border: 1px solid var(--border);
       padding: 2rem;
       transition: 0.3s;
+      text-decoration: none;
+      color: inherit;
     }
 
-    .skill-card:hover {
+    .skill-card:hover,
+    .project-card:hover {
       border-color: var(--accent);
-      transform: translateY(-4px);
+      transform: translateY(-5px);
+    }
+
+    .skill-card h3,
+    .project-card h3 {
+      margin-bottom: 1rem;
+      color: white;
     }
 
     .skill-card h3 {
-      margin-bottom: 1rem;
       color: var(--accent);
       font-family: var(--mono);
     }
 
-    .skill-tags {
+    .skill-tags,
+    .project-techs {
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
+      margin-top: 1.2rem;
     }
 
     .tag {
@@ -221,7 +230,24 @@
       font-family: var(--mono);
     }
 
-    /* EXPERIENCE */
+    .project-num {
+      color: var(--muted);
+      font-family: var(--mono);
+      margin-bottom: 1rem;
+    }
+
+    .project-card p {
+      line-height: 1.7;
+    }
+
+    .project-tech {
+      background: rgba(0,255,157,0.08);
+      border: 1px solid rgba(0,255,157,0.2);
+      color: var(--accent2);
+      padding: 0.3rem 0.7rem;
+      font-size: 0.7rem;
+      font-family: var(--mono);
+    }
 
     .timeline {
       border-left: 1px solid var(--border);
@@ -281,64 +307,6 @@
       left: 0;
     }
 
-    /* PROJECTS */
-
-    #projects {
-      background: var(--surface);
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(320px,1fr));
-      gap: 1.5rem;
-    }
-
-    .project-card {
-      border: 1px solid var(--border);
-      padding: 2rem;
-      text-decoration: none;
-      color: inherit;
-      transition: 0.3s;
-    }
-
-    .project-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-5px);
-    }
-
-    .project-num {
-      color: var(--muted);
-      font-family: var(--mono);
-      margin-bottom: 1rem;
-    }
-
-    .project-card h3 {
-      color: white;
-      margin-bottom: 1rem;
-    }
-
-    .project-card p {
-      line-height: 1.7;
-    }
-
-    .project-techs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 1.5rem;
-    }
-
-    .project-tech {
-      background: rgba(0,255,157,0.08);
-      border: 1px solid rgba(0,255,157,0.2);
-      color: var(--accent2);
-      padding: 0.3rem 0.7rem;
-      font-size: 0.7rem;
-      font-family: var(--mono);
-    }
-
-    /* CERTS */
-
     .certs-list {
       display: flex;
       flex-direction: column;
@@ -361,8 +329,6 @@
       font-family: var(--mono);
       font-size: 0.8rem;
     }
-
-    /* CONTACT */
 
     #contact {
       text-align: center;
@@ -393,7 +359,6 @@
     }
 
     @media(max-width:768px) {
-
       nav {
         padding: 1rem 1.5rem;
       }
@@ -427,13 +392,8 @@
 
 <main>
 
-  <!-- HERO -->
-
   <section id="hero">
-
-    <div class="hero-tag">
-      // Calgary, AB | Available for Internships
-    </div>
+    <div class="hero-tag">// Calgary, AB | Available for Internships</div>
 
     <h1 class="hero-name">
       ALI <br>
@@ -449,37 +409,18 @@
     </p>
 
     <div class="hero-cta">
-
-      <a class="btn btn-solid"
-         href="mailto:asamir1666@gmail.com">
-        Email Me
-      </a>
-
-      <a class="btn"
-         href="https://linkedin.com/in/ali-elmeligy-49b1111b0"
-         target="_blank">
-        LinkedIn
-      </a>
-
+      <a class="btn btn-solid" href="mailto:asamir1666@gmail.com">Email Me</a>
+      <a class="btn" href="https://linkedin.com/in/ali-elmeligy-49b1111b0" target="_blank">LinkedIn</a>
     </div>
-
   </section>
 
-  <!-- SKILLS -->
-
   <section id="skills">
-
-    <div class="section-label">
-      01 / Skills
-    </div>
-
+    <div class="section-label">01 / Skills</div>
     <h2>Technical Skills</h2>
 
     <div class="skills-grid">
-
       <div class="skill-card">
         <h3>Programming</h3>
-
         <div class="skill-tags">
           <span class="tag">Python</span>
           <span class="tag">JavaScript</span>
@@ -492,7 +433,6 @@
 
       <div class="skill-card">
         <h3>Data & Analytics</h3>
-
         <div class="skill-tags">
           <span class="tag">Excel</span>
           <span class="tag">Google Sheets</span>
@@ -504,7 +444,6 @@
 
       <div class="skill-card">
         <h3>Development Tools</h3>
-
         <div class="skill-tags">
           <span class="tag">Git</span>
           <span class="tag">GitLab</span>
@@ -516,7 +455,6 @@
 
       <div class="skill-card">
         <h3>Systems & Cloud</h3>
-
         <div class="skill-tags">
           <span class="tag">Linux</span>
           <span class="tag">Virtual Machines</span>
@@ -527,7 +465,6 @@
 
       <div class="skill-card">
         <h3>UI / UX</h3>
-
         <div class="skill-tags">
           <span class="tag">Frontend Design</span>
           <span class="tag">Responsive Design</span>
@@ -537,7 +474,6 @@
 
       <div class="skill-card">
         <h3>Professional Skills</h3>
-
         <div class="skill-tags">
           <span class="tag">Communication</span>
           <span class="tag">Leadership</span>
@@ -545,36 +481,18 @@
           <span class="tag">Team Collaboration</span>
         </div>
       </div>
-
     </div>
-
   </section>
 
-  <!-- EXPERIENCE -->
-
   <section id="experience">
-
-    <div class="section-label">
-      02 / Experience
-    </div>
-
+    <div class="section-label">02 / Experience</div>
     <h2>Professional Experience</h2>
 
     <div class="timeline">
-
       <div class="exp-item">
-
-        <div class="exp-date">
-          NOV 2023 — PRESENT
-        </div>
-
-        <div class="exp-title">
-          Sales & Customer Service Supervisor
-        </div>
-
-        <div class="exp-company">
-          Gold’s Gym · Calgary, AB
-        </div>
+        <div class="exp-date">NOV 2023 — PRESENT</div>
+        <div class="exp-title">Sales & Customer Service Supervisor</div>
+        <div class="exp-company">Gold’s Gym · Calgary, AB</div>
 
         <ul class="exp-bullets">
           <li>Built strong customer relationships in a fast-paced sales and service environment</li>
@@ -583,22 +501,12 @@
           <li>Supported onboarding and training of team members while maintaining high service standards</li>
           <li>Used structured reporting and tracking methods to support customer retention efforts</li>
         </ul>
-
       </div>
 
       <div class="exp-item">
-
-        <div class="exp-date">
-          2024 — PRESENT
-        </div>
-
-        <div class="exp-title">
-          Founder & Web Operations Manager
-        </div>
-
-        <div class="exp-company">
-          HRTBRK · Calgary, AB
-        </div>
+        <div class="exp-date">2024 — PRESENT</div>
+        <div class="exp-title">Founder & Web Operations Manager</div>
+        <div class="exp-company">HRTBRK · Calgary, AB</div>
 
         <ul class="exp-bullets">
           <li>Built and managed an online clothing brand and digital storefront</li>
@@ -606,22 +514,12 @@
           <li>Managed product workflows, online orders, and content updates</li>
           <li>Worked on frontend design and user experience improvements</li>
         </ul>
-
       </div>
 
       <div class="exp-item">
-
-        <div class="exp-date">
-          APR 2022 — OCT 2022
-        </div>
-
-        <div class="exp-title">
-          IT Support / Customer Service Representative
-        </div>
-
-        <div class="exp-company">
-          ESERA Pro Services · Calgary, AB
-        </div>
+        <div class="exp-date">APR 2022 — OCT 2022</div>
+        <div class="exp-title">IT Support / Customer Service Representative</div>
+        <div class="exp-company">ESERA Pro Services · Calgary, AB</div>
 
         <ul class="exp-bullets">
           <li>Assisted users with technical and customer-related issues</li>
@@ -629,235 +527,134 @@
           <li>Resolved issues efficiently through troubleshooting and communication</li>
           <li>Provided day-to-day support in a collaborative team environment</li>
         </ul>
-
       </div>
-
     </div>
-
   </section>
 
-  <!-- PROJECTS -->
-
   <section id="projects">
-
-    <div class="section-label">
-      03 / Projects
-    </div>
-
+    <div class="section-label">03 / Projects</div>
     <h2>Projects & Work</h2>
 
     <div class="projects-grid">
 
-      <a class="project-card"
-         href="https://docs.google.com/spreadsheets/d/1WLP9ufyFjV0VaLwO2wnXbzxGX6im010U94iaYIzcEDs/edit?usp=sharing"
-         target="_blank">
-
-        <div class="project-num">
-          01 ↗ VIEW PROJECT
-        </div>
-
-        <h3>
-          Sales & Membership Data Reporting Project
-        </h3>
-
+      <a class="project-card" href="https://docs.google.com/spreadsheets/d/1WLP9ufyFjV0VaLwO2wnXbzxGX6im010U94iaYIzcEDs/edit?usp=sharing" target="_blank">
+        <div class="project-num">01 ↗ VIEW PROJECT</div>
+        <h3>Sales & Membership Data Reporting Project</h3>
         <p>
           Organized and analyzed sales and membership data using Excel and structured reporting methods. Identified customer engagement and retention trends to support decision-making and created simplified reports and dashboards to improve reporting clarity.
         </p>
-
         <div class="project-techs">
           <span class="project-tech">Excel</span>
           <span class="project-tech">Google Sheets</span>
           <span class="project-tech">Data Analysis</span>
           <span class="project-tech">Dashboards</span>
         </div>
-
       </a>
 
       <div class="project-card">
-
-        <div class="project-num">
-          02
-        </div>
-
-        <h3>
-          Automation Script (Python)
-        </h3>
-
+        <div class="project-num">02</div>
+        <h3>Automation Script</h3>
         <p>
           Developed Python scripts to automate repetitive workflows and improve efficiency while reducing manual processing tasks through structured automation.
         </p>
-
         <div class="project-techs">
           <span class="project-tech">Python</span>
           <span class="project-tech">Automation</span>
           <span class="project-tech">Debugging</span>
         </div>
-
       </div>
 
-      <a class="project-card"
-         href="https://hrtbrk.ca/"
-         target="_blank">
-
-        <div class="project-num">
-          03 ↗ LIVE SITE
-        </div>
-
-        <h3>
-          HRTBRK — E-Commerce & Brand Operations
-        </h3>
-
+      <a class="project-card" href="https://hrtbrk.ca/" target="_blank">
+        <div class="project-num">03 ↗ LIVE SITE</div>
+        <h3>HRTBRK — E-Commerce & Brand Operations</h3>
         <p>
           Built and managed an online fashion brand focused on customer experience, branding, digital presentation, and website operations.
         </p>
-
         <div class="project-techs">
           <span class="project-tech">E-Commerce</span>
           <span class="project-tech">Frontend</span>
           <span class="project-tech">Branding</span>
         </div>
-
       </a>
 
-      <a class="project-card"
-         href="https://csgit.ucalgary.ca/seng300w26/pg-10/seng300-202601-pg-10"
-         target="_blank">
-
-        <div class="project-num">
-          04 ↗ VIEW REPO
-        </div>
-
-        <h3>
-          Software Engineering Project — Game Platform
-        </h3>
-
+      <a class="project-card" href="https://csgit.ucalgary.ca/seng300w26/pg-10/seng300-202601-pg-10" target="_blank">
+        <div class="project-num">04 ↗ VIEW REPO</div>
+        <h3>Software Engineering Project — Game Platform</h3>
         <p>
           Collaborated in a development team to build and test a multi-component software platform while improving frontend functionality and user experience.
         </p>
-
         <div class="project-techs">
           <span class="project-tech">Software Engineering</span>
           <span class="project-tech">Frontend</span>
           <span class="project-tech">Team Development</span>
         </div>
+      </a>
 
+      <a class="project-card" href="#" target="_blank">
+        <div class="project-num">05 ↗ COMING SOON</div>
+        <h3>AI Resume Analyzer</h3>
+        <p>
+          Built an AI-style resume analysis tool that reviews resumes, checks internship-related keywords, provides an ATS-style score, and gives improvement suggestions for software, data, and IT roles.
+        </p>
+        <div class="project-techs">
+          <span class="project-tech">JavaScript</span>
+          <span class="project-tech">AI Tools</span>
+          <span class="project-tech">Frontend</span>
+          <span class="project-tech">Resume Analysis</span>
+        </div>
+      </a>
+
+      <a class="project-card" href="#" target="_blank">
+        <div class="project-num">06 ↗ COMING SOON</div>
+        <h3>Internship Application Tracker</h3>
+        <p>
+          Created a web app for tracking internship applications, statuses, deadlines, company notes, and follow-ups to help students stay organized during the job search process.
+        </p>
+        <div class="project-techs">
+          <span class="project-tech">JavaScript</span>
+          <span class="project-tech">Local Storage</span>
+          <span class="project-tech">Productivity</span>
+          <span class="project-tech">CRUD</span>
+        </div>
       </a>
 
     </div>
-    <a class="project-card" href="#" target="_blank">
-  <div class="project-num">05 ↗ COMING SOON</div>
-
-  <h3>AI Resume Analyzer</h3>
-
-  <p>
-    Built an AI-style resume analysis tool that reviews resumes, checks internship-related keywords,
-    provides an ATS-style score, and gives improvement suggestions for software, data, and IT roles.
-  </p>
-
-  <div class="project-techs">
-    <span class="project-tech">JavaScript</span>
-    <span class="project-tech">AI Tools</span>
-    <span class="project-tech">Frontend</span>
-    <span class="project-tech">Resume Analysis</span>
-  </div>
-</a>
-
-<a class="project-card" href="#" target="_blank">
-  <div class="project-num">06 ↗ COMING SOON</div>
-
-  <h3>Internship Application Tracker</h3>
-
-  <p>
-    Created a web app for tracking internship applications, statuses, deadlines, company notes,
-    and follow-ups to help students stay organized during the job search process.
-  </p>
-
-  <div class="project-techs">
-    <span class="project-tech">JavaScript</span>
-    <span class="project-tech">Local Storage</span>
-    <span class="project-tech">Productivity</span>
-    <span class="project-tech">CRUD</span>
-  </div>
-</a>
-    
   </section>
 
-  <!-- CERTIFICATIONS -->
-
   <section id="certs">
-
-    <div class="section-label">
-      04 / Certifications
-    </div>
-
+    <div class="section-label">04 / Certifications</div>
     <h2>Education & Certifications</h2>
 
     <div class="certs-list">
-
       <div class="cert-item">
-        <div class="cert-name">
-          Bachelor of Computer Science
-        </div>
-
-        <div class="cert-org">
-          University of Calgary · Sept 2023 – Present
-        </div>
+        <div class="cert-name">Bachelor of Computer Science</div>
+        <div class="cert-org">University of Calgary · Sept 2023 – Present</div>
       </div>
 
       <div class="cert-item">
-        <div class="cert-name">
-          OpenStack & NFV (TelcoCloud)
-        </div>
-
-        <div class="cert-org">
-          Udemy
-        </div>
+        <div class="cert-name">OpenStack & NFV (TelcoCloud)</div>
+        <div class="cert-org">Udemy</div>
       </div>
 
       <div class="cert-item">
-        <div class="cert-name">
-          Oracle Academy SQL Workshop
-        </div>
-
-        <div class="cert-org">
-          Oracle
-        </div>
+        <div class="cert-name">Oracle Academy SQL Workshop</div>
+        <div class="cert-org">Oracle</div>
       </div>
-
     </div>
-
   </section>
 
-  <!-- CONTACT -->
-
   <section id="contact">
-
-    <div class="section-label">
-      05 / Contact
-    </div>
-
+    <div class="section-label">05 / Contact</div>
     <h2>Get In Touch</h2>
 
-    <a class="contact-email"
-       href="mailto:asamir1666@gmail.com">
+    <a class="contact-email" href="mailto:asamir1666@gmail.com">
       asamir1666@gmail.com
     </a>
 
     <div class="contact-links">
-
-      <a class="btn"
-         href="tel:4318665854">
-        431-866-5854
-      </a>
-
-      <a class="btn"
-         href="https://linkedin.com/in/ali-elmeligy-49b1111b0"
-         target="_blank">
-        LinkedIn
-      </a>
-
+      <a class="btn" href="tel:4318665854">431-866-5854</a>
+      <a class="btn" href="https://linkedin.com/in/ali-elmeligy-49b1111b0" target="_blank">LinkedIn</a>
     </div>
-
   </section>
 
 </main>
@@ -867,7 +664,6 @@
 </footer>
 
 <script>
-
 const canvas = document.getElementById('bg');
 const ctx = canvas.getContext('2d');
 
@@ -891,11 +687,9 @@ for(let i = 0; i < 70; i++) {
 }
 
 function animate() {
-
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
   particles.forEach(p => {
-
     p.x += p.vx;
     p.y += p.vy;
 
@@ -906,27 +700,20 @@ function animate() {
     ctx.arc(p.x,p.y,2,0,Math.PI*2);
     ctx.fillStyle = 'rgba(0,229,255,0.5)';
     ctx.fill();
-
   });
 
   for(let i=0;i<particles.length;i++) {
-
     for(let j=i+1;j<particles.length;j++) {
-
       const dx = particles[i].x - particles[j].x;
       const dy = particles[i].y - particles[j].y;
-
       const dist = Math.sqrt(dx*dx + dy*dy);
 
       if(dist < 120) {
-
         ctx.beginPath();
         ctx.moveTo(particles[i].x,particles[i].y);
         ctx.lineTo(particles[j].x,particles[j].y);
-
         ctx.strokeStyle = `rgba(0,229,255,${0.15 - dist/1000})`;
         ctx.stroke();
-
       }
     }
   }
@@ -935,7 +722,6 @@ function animate() {
 }
 
 animate();
-
 </script>
 
 </body>
